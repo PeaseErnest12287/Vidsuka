@@ -1,10 +1,11 @@
 import logging
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 import yt_dlp
 import os
 import re
 import threading
+import time
 
 # --------------------- Setup ---------------------
 app = Flask(__name__)
@@ -22,6 +23,9 @@ logging.basicConfig(
 VIDEO_DIR = './saved/videos'
 os.makedirs(VIDEO_DIR, exist_ok=True)
 
+# Global variable to store download progress
+download_progress = {}
+
 # --------------------- Helper Functions ---------------------
 
 def clean_filename(title):
@@ -37,8 +41,9 @@ def clean_filename(title):
     return cleaned_title
 
 def download_video_yt_dlp(url, format_choice=None):
+    global download_progress
     logging.info(f"Received download request for URL: {url}")
-    
+
     ydl_opts = {
         'format': format_choice if format_choice else 'bestvideo+bestaudio/best',  # Use provided format or best option
         'outtmpl': f'{VIDEO_DIR}%(title)s.%(ext)s',  # Save location and filename template
@@ -47,6 +52,7 @@ def download_video_yt_dlp(url, format_choice=None):
             'preferedformat': 'mp4',  # Ensure conversion to mp4
         }],
         'noplaylist': True,  # Don't download playlists
+        'progress_hooks': [lambda d: progress_hook(d)],  # Hook to track download progress
     }
 
     try:
@@ -67,6 +73,16 @@ def download_video_yt_dlp(url, format_choice=None):
     except Exception as e:
         logging.error(f"Error downloading video: {str(e)}")
         raise Exception(f"Error downloading video: {str(e)}")
+
+def progress_hook(d):
+    global download_progress
+    if d['status'] == 'downloading':
+        download_progress = {
+            'status': 'downloading',
+            'downloaded': d['downloaded_bytes'],
+            'total': d['total_bytes'],
+            'percent': (d['downloaded_bytes'] / d['total_bytes']) * 100,
+        }
 
 def get_video_formats(url):
     try:
@@ -121,6 +137,9 @@ def download_video():
         logging.error(f"Error during video download: {str(e)}")
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
+@app.route('/download-progress', methods=['GET'])
+def get_download_progress():
+    return jsonify(download_progress)
 
 @app.route('/logs', methods=['GET'])
 def get_logs():
