@@ -4,3 +4,4 @@ pytube==15.0.0
 APScheduler==3.10.4
 python-dotenv==1.0.1
 imageio[ffmpeg]==2.25.0  
+flask-cors==5.0.1

@@ -1,8 +1,9 @@
 import logging
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import yt_dlp
 import os
 import re
+import threading
 
 app = Flask(__name__)
 
@@ -16,9 +17,6 @@ logging.basicConfig(
     level=logging.DEBUG,  # Set to DEBUG or INFO as needed
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
-
-# Log a startup message
-logging.info('Server started')
 
 # Ensure the 'saved/videos/' directory exists
 save_dir = './saved/videos/'
@@ -54,7 +52,7 @@ def download_video_yt_dlp(url):
         logging.info("Starting video download process...")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(url, download=True)
-            original_title = info_dict.get('title', '')
+            original_title = info_dict.get('title', 'Untitled')
             cleaned_filename = clean_filename(original_title)  # Clean up the filename
             filename = f'{save_dir}{cleaned_filename}.mp4'  # Save as .mp4 with cleaned-up name
             
@@ -69,6 +67,30 @@ def download_video_yt_dlp(url):
         logging.error(f"Error downloading video: {str(e)}")
         raise Exception(f"Error downloading video: {str(e)}")
 
+def handle_download(url):
+    download_video_yt_dlp(url)
+
+@app.route('/download', methods=['POST'])
+def download_video():
+    data = request.json
+    url = data.get('url')
+    
+    if not url:
+        logging.warning("No URL provided in the download request")
+        return jsonify({"error": "No URL provided"}), 400
+
+    try:
+        logging.info(f"Received download request for URL: {url}")
+        
+        # Start the download in a separate thread
+        download_thread = threading.Thread(target=handle_download, args=(url,))
+        download_thread.start()
+
+        return jsonify({"message": "Download started, check back later for completion."}), 200
+    except Exception as e:
+        logging.error(f"Error starting download: {str(e)}")
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
 @app.route('/logs', methods=['GET'])
 def get_logs():
     try:
@@ -80,4 +102,4 @@ def get_logs():
         return jsonify({'error': 'Unable to retrieve logs'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

@@ -1,11 +1,16 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from downloader.yt_dlp_engine import download_video_yt_dlp
 from downloader.pytube_engine import download_video_pytube
 from saved.cleanup import clean_old_videos
 import os
 import logging
 
-# Set up logging
+# --------------------- Setup ---------------------
+app = Flask(__name__)
+CORS(app)  # Allow all origins by default (adjust for production)
+
+# Logging setup
 log_file_path = 'app.log'
 logging.basicConfig(
     filename=log_file_path,
@@ -13,21 +18,20 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-app = Flask(__name__)
-
-# Ensure the video directory exists
+# Create video directory if it doesn't exist
 VIDEO_DIR = './saved/videos'
-if not os.path.exists(VIDEO_DIR):
-    os.makedirs(VIDEO_DIR)
+os.makedirs(VIDEO_DIR, exist_ok=True)
 
-# Clean up old videos periodically (you can schedule this job if needed)
+# Clean old videos on startup
 clean_old_videos()
+
+# --------------------- Routes ---------------------
 
 @app.route('/download', methods=['POST'])
 def download_video():
     data = request.json
     url = data.get('url')
-    platform = data.get('platform', 'yt_dlp')  # Default to yt_dlp
+    platform = data.get('platform', 'yt_dlp')
 
     if not url:
         logging.warning("No URL provided in the download request")
@@ -35,21 +39,20 @@ def download_video():
 
     try:
         logging.info(f"Received download request for URL: {url} on platform: {platform}")
-        # Call appropriate download function based on platform
+        
+        # Download using chosen engine
         if platform == 'yt_dlp':
             video_info = download_video_yt_dlp(url)
         else:
             video_info = download_video_pytube(url)
-        
-        logging.info(f"Video download completed for: {video_info['title']}")
+
+        logging.info(f"Video download completed for: {video_info.get('title', 'Unknown Title')}")
         return jsonify(video_info), 200
+
     except Exception as e:
         logging.error(f"Error during video download: {str(e)}")
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
-if __name__ == '__main__':
-    # Start the Flask app
-    app.run(debug=True, host='0.0.0.0', port=5000)
 @app.route('/logs', methods=['GET'])
 def get_logs():
     try:
@@ -59,3 +62,7 @@ def get_logs():
     except Exception as e:
         logging.error(f"Error reading logs: {str(e)}")
         return jsonify({'error': 'Unable to retrieve logs'}), 500
+
+# --------------------- Run ---------------------
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
