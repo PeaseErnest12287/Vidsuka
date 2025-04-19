@@ -39,14 +39,16 @@ def download_video_yt_dlp(url):
     logging.info(f"Received download request for URL: {url}")
     
     ydl_opts = {
-        'format': 'bestvideo+bestaudio/best',  # Download best video and audio
-        'outtmpl': f'{save_dir}%(title)s.%(ext)s',  # Save location and filename template
-        'postprocessors': [{
-            'key': 'FFmpegVideoConvertor',  # Use FFmpeg for conversion
-            'preferedformat': 'mp4',  # Ensure conversion to mp4
-        }],
-        'noplaylist': True,  # Don't download playlists
+    'format': 'bestvideo+bestaudio/best',
+    'outtmpl': f'{save_dir}%(title)s.%(ext)s',
+    'postprocessors': [{
+        'key': 'FFmpegVideoConvertor',
+        'preferedformat': 'mp4',
+    }],
+    'noplaylist': True,
+    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36'
     }
+
 
     try:
         logging.info("Starting video download process...")
