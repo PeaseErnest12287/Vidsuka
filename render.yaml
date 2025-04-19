@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: vidsuka-backend
+    env: python
+    buildCommand: |
+      apt-get update && apt-get install -y ffmpeg
+      pip install -r requirements.txt
+    startCommand: python app.py
+    # Expose port 5000 for Flask to listen on
+    port: 5000

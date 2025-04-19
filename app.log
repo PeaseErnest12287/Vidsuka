@@ -1,0 +1,126 @@
+2025-04-19 12:27:51,461 - INFO - Server started
+2025-04-19 12:27:51,760 - WARNING -  * Debugger is active!
+2025-04-19 12:27:51,775 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 13:38:59,910 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\utils.py', reloading
+2025-04-19 13:39:21,628 - INFO - Server started
+2025-04-19 13:39:24,193 - WARNING -  * Debugger is active!
+2025-04-19 13:39:24,225 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 13:39:39,478 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\app.py', reloading
+2025-04-19 13:39:42,378 - INFO - Server started
+2025-04-19 13:39:42,462 - WARNING -  * Debugger is active!
+2025-04-19 13:39:42,466 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 13:41:40,284 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\app.py', reloading
+2025-04-19 13:41:43,496 - INFO - Server started
+2025-04-19 13:41:43,564 - WARNING -  * Debugger is active!
+2025-04-19 13:41:43,576 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 14:03:35,320 - INFO - Received download request for URL: https://www.youtube.com/shorts/PiMDZfbWb5A on platform: yt_dlp
+2025-04-19 14:03:35,364 - INFO - Received download request for URL: https://www.youtube.com/shorts/PiMDZfbWb5A
+2025-04-19 14:03:35,364 - INFO - Starting video download process...
+2025-04-19 14:06:05,434 - ERROR - Error downloading video: 'NoneType' object has no attribute 'lower'
+2025-04-19 14:06:05,434 - ERROR - Error during video download: Error downloading video: 'NoneType' object has no attribute 'lower'
+2025-04-19 14:06:05,478 - INFO - 127.0.0.1 - - [19/Apr/2025 14:06:05] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 14:13:16,835 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\yt_dlp_engine.py', reloading
+2025-04-19 14:13:58,069 - INFO - Server started
+2025-04-19 14:14:09,962 - WARNING -  * Debugger is active!
+2025-04-19 14:14:10,329 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 14:18:51,537 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\pytube_engine.py', reloading
+2025-04-19 14:19:04,552 - INFO - Server started
+2025-04-19 14:19:07,079 - WARNING -  * Debugger is active!
+2025-04-19 14:19:07,091 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 14:20:16,391 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 14:20:16,391 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 14:20:16,391 - INFO - Starting video download process...
+2025-04-19 14:20:18,708 - ERROR - Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'format'
+2025-04-19 14:20:18,708 - ERROR - Error during video download: Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'format'
+2025-04-19 14:20:18,708 - INFO - 127.0.0.1 - - [19/Apr/2025 14:20:18] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 14:21:58,475 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\yt_dlp_engine.py', reloading
+2025-04-19 14:22:13,795 - INFO - Server started
+2025-04-19 14:22:14,702 - WARNING -  * Debugger is active!
+2025-04-19 14:22:14,706 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 14:23:09,428 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\yt_dlp_engine.py', reloading
+2025-04-19 14:23:21,437 - INFO - Server started
+2025-04-19 14:23:22,381 - WARNING -  * Debugger is active!
+2025-04-19 14:23:22,386 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 14:23:23,713 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 14:23:23,713 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 14:23:23,713 - INFO - Starting video download process...
+2025-04-19 14:23:24,230 - ERROR - Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'preferredformat'
+2025-04-19 14:23:24,230 - ERROR - Error during video download: Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'preferredformat'
+2025-04-19 14:23:24,230 - INFO - 127.0.0.1 - - [19/Apr/2025 14:23:24] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 14:23:48,768 - INFO - 127.0.0.1 - - [19/Apr/2025 14:23:48] "[31m[1mPOST /download HTTP/1.1[0m" 400 -
+2025-04-19 14:25:00,450 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 14:25:00,450 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 14:25:00,450 - INFO - Starting video download process...
+2025-04-19 14:25:00,516 - ERROR - Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'preferredformat'
+2025-04-19 14:25:00,516 - ERROR - Error during video download: Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'preferredformat'
+2025-04-19 14:25:00,516 - INFO - 127.0.0.1 - - [19/Apr/2025 14:25:00] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 14:25:09,550 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 14:25:09,550 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 14:25:09,550 - INFO - Starting video download process...
+2025-04-19 14:25:09,655 - ERROR - Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'preferredformat'
+2025-04-19 14:25:09,655 - ERROR - Error during video download: Error downloading video: FFmpegVideoConvertorPP.__init__() got an unexpected keyword argument 'preferredformat'
+2025-04-19 14:25:09,655 - INFO - 127.0.0.1 - - [19/Apr/2025 14:25:09] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 14:25:59,253 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\yt_dlp_engine.py', reloading
+2025-04-19 14:26:02,714 - INFO - Server started
+2025-04-19 14:26:02,777 - WARNING -  * Debugger is active!
+2025-04-19 14:26:02,781 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 14:26:08,271 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 14:26:08,271 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 14:26:08,272 - INFO - Starting video download process...
+2025-04-19 14:26:48,871 - ERROR - Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\89K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 14:26:48,931 - ERROR - Error during video download: Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\89K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 14:26:48,931 - INFO - 127.0.0.1 - - [19/Apr/2025 14:26:48] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 15:03:31,344 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\yt_dlp_engine.py', reloading
+2025-04-19 15:03:49,884 - INFO - Server started
+2025-04-19 15:03:50,666 - WARNING -  * Debugger is active!
+2025-04-19 15:03:50,695 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 15:13:41,785 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 15:13:41,785 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 15:13:41,785 - INFO - Starting video download process...
+2025-04-19 15:13:47,284 - ERROR - Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\90K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 15:13:47,284 - ERROR - Error during video download: Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\90K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 15:13:47,318 - INFO - 127.0.0.1 - - [19/Apr/2025 15:13:47] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 15:15:57,553 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\yt_dlp_engine.py', reloading
+2025-04-19 15:16:21,732 - INFO - Server started
+2025-04-19 15:16:22,597 - WARNING -  * Debugger is active!
+2025-04-19 15:16:22,597 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 15:16:24,496 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 15:16:24,496 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 15:16:24,496 - INFO - Starting video download process...
+2025-04-19 15:16:32,113 - ERROR - Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\90K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 15:16:32,114 - ERROR - Error during video download: Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\90K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 15:16:32,114 - INFO - 127.0.0.1 - - [19/Apr/2025 15:16:32] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 15:18:26,819 - INFO -  * Detected change in 'C:\\Users\\MALOBA\\Desktop\\vidsuka-backend\\downloader\\yt_dlp_engine.py', reloading
+2025-04-19 15:18:37,399 - INFO - Server started
+2025-04-19 15:18:38,414 - WARNING -  * Debugger is active!
+2025-04-19 15:18:38,414 - INFO -  * Debugger PIN: 102-178-422
+2025-04-19 15:18:40,474 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d on platform: yt_dlp
+2025-04-19 15:18:40,474 - INFO - Received download request for URL: https://www.facebook.com/reel/3942325625982940/?s=ifu&__cft__[0]=AZU7bZbs9nIKXuug9leZV4BiEdN-vKmX4zLcup2PtKvxwElU9_O0_KC_7dlNBSs-rK-AYLxvDxSMbyiSeFUIeQRuglr-GI5pNjZ0h6lStGbN7Tb4VpqIBIAmKaDvu-qwHZdJQpp7ujPh_gqE2u1oxUOdvFPgCOTH1qi6L86UJLD_rdZCuYdMKxYxk7rrbaeCKE8AW4Ig4O9Sw_S_id7vzI-d
+2025-04-19 15:18:40,474 - INFO - Starting video download process...
+2025-04-19 15:18:48,179 - ERROR - Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\90K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 15:18:48,179 - ERROR - Error during video download: Error downloading video: [0;31mERROR:[0m unable to open for writing: [Errno 2] No such file or directory: 'saved\\videos\\90K views · 92K reactions \uff5c Another slow motion TRIPLE LAYOUT\U0001f92f\U0001f525 Another angle of my best triple layout yet\u2757\ufe0f #australia #tumbling #reels #trending #motivation #instafit #gym #gymnastics #sport #goals #viral \uff5c Ethan McGuinness.f651737567463475v.mp4.part'
+2025-04-19 15:18:48,194 - INFO - 127.0.0.1 - - [19/Apr/2025 15:18:48] "[35m[1mPOST /download HTTP/1.1[0m" 500 -
+2025-04-19 15:20:20,655 - INFO - Received download request for URL: https://www.youtube.com/shorts/nQhf65w05vg on platform: yt_dlp
+2025-04-19 15:20:20,655 - INFO - Received download request for URL: https://www.youtube.com/shorts/nQhf65w05vg
+2025-04-19 15:20:20,655 - INFO - Starting video download process...
+2025-04-19 15:22:08,216 - INFO - Download successful: ./saved/videos/We_should_have_called_the_Police_target_shorts_trend.mp4
+2025-04-19 15:22:08,219 - INFO - Video download completed for: We should have called the Police #target #shorts #trend
+2025-04-19 15:22:08,220 - INFO - 127.0.0.1 - - [19/Apr/2025 15:22:08] "POST /download HTTP/1.1" 200 -
+2025-04-19 15:23:59,920 - INFO - Received download request for URL: https://www.tiktok.com/@lam_tamara/video/7463734432432753926?is_from_webapp=1&sender_device=pc on platform: yt_dlp
+2025-04-19 15:23:59,920 - INFO - Received download request for URL: https://www.tiktok.com/@lam_tamara/video/7463734432432753926?is_from_webapp=1&sender_device=pc
+2025-04-19 15:23:59,920 - INFO - Starting video download process...
+2025-04-19 15:24:09,725 - INFO - Download successful: ./saved/videos/foryou_kidsoftiktok_justam_Godalways_trending_viral_Coac.mp4
+2025-04-19 15:24:09,728 - INFO - Video download completed for: \u2665\ufe0f\u2764\ufe0f\u2764\ufe0f#foryou #kidsoftiktok #justam #Godalways #trending #viral @Coac...
+2025-04-19 15:24:09,729 - INFO - 127.0.0.1 - - [19/Apr/2025 15:24:09] "POST /download HTTP/1.1" 200 -
+2025-04-19 15:46:10,840 - INFO - Received download request for URL: https://www.instagram.com/reel/DIl5rGIsd7y/?utm_source=ig_web_copy_link on platform: yt_dlp
+2025-04-19 15:46:10,854 - INFO - Received download request for URL: https://www.instagram.com/reel/DIl5rGIsd7y/?utm_source=ig_web_copy_link
+2025-04-19 15:46:10,854 - INFO - Starting video download process...
+2025-04-19 15:46:49,454 - INFO - Download successful: ./saved/videos/Video_by_cinturinhadimola.mp4
+2025-04-19 15:46:49,457 - INFO - Video download completed for: Video by cinturinhadimola
+2025-04-19 15:46:49,459 - INFO - 127.0.0.1 - - [19/Apr/2025 15:46:49] "POST /download HTTP/1.1" 200 -
+2025-04-19 15:48:28,039 - INFO - Received download request for URL: https://www.facebook.com/reel/3923630831281800/?s=ifu&__cft__[0]=AZWEmINhooBdBkTTF7QjG2PoyU-K6CQSZGXEOu5h_DvHwJ0dw-52WuFW4cbCAizHy1hxb-fW26kDI1qyQm5_m_5lYf9vNXFUrvEJt0xLUfQr1l_lIHGK-jmMt81xE8ZB9xSOcIToO9gOp8_RK6a1KaJDeE1vbByeQkg95AsFu3nsgMYY-h9lS68MSBXZKfMaJrH-yvAOSoXhv8n4etB8z7IcyMVZiocuzSKQe2FrqUSPIA on platform: yt_dlp
+2025-04-19 15:48:28,040 - INFO - Received download request for URL: https://www.facebook.com/reel/3923630831281800/?s=ifu&__cft__[0]=AZWEmINhooBdBkTTF7QjG2PoyU-K6CQSZGXEOu5h_DvHwJ0dw-52WuFW4cbCAizHy1hxb-fW26kDI1qyQm5_m_5lYf9vNXFUrvEJt0xLUfQr1l_lIHGK-jmMt81xE8ZB9xSOcIToO9gOp8_RK6a1KaJDeE1vbByeQkg95AsFu3nsgMYY-h9lS68MSBXZKfMaJrH-yvAOSoXhv8n4etB8z7IcyMVZiocuzSKQe2FrqUSPIA
+2025-04-19 15:48:28,043 - INFO - Starting video download process...
+2025-04-19 15:49:12,755 - INFO - Download successful: ./saved/videos/34K_reactions__13K_shares__Human_Torch_chasing_Silver_Surfer_fantastic_fantasticfour_doomsday_ironma.mp4
+2025-04-19 15:49:12,757 - INFO - Video download completed for: 34K reactions · 1.3K shares | Human Torch chasing Silver Surfer #fantastic #fantasticfour #doomsday #ironman | Salmanedits30
+2025-04-19 15:49:12,757 - INFO - 127.0.0.1 - - [19/Apr/2025 15:49:12] "POST /download HTTP/1.1" 200 -
