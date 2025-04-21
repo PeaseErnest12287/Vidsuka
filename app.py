@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import logging
 from dotenv import load_dotenv
+from urllib.parse import unquote
 
 # Load environment variables
 load_dotenv()
@@ -137,12 +138,12 @@ def download_video():
         # Get video info first
         info = get_video_info(url)
         safe_title = sanitize_filename(info['title'])
-        filename = f"{safe_title}_{str(uuid.uuid4())[:8]}"
+        filename = f"{safe_title}_{str(uuid.uuid4())[:8]}.mp4"  # Force .mp4 extension
         filepath = DOWNLOAD_FOLDER / filename
         
         ydl_opts = {
             'format': format_id,
-            'outtmpl': str(filepath) + '.%(ext)s',
+            'outtmpl': str(filepath.with_suffix('')),  # Remove extension as yt-dlp will add it
             'quiet': False,
             'merge_output_format': 'mp4',
             'postprocessors': [{
@@ -160,34 +161,44 @@ def download_video():
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
         
-        # Find the downloaded file - more robust search
-        downloaded_files = list(DOWNLOAD_FOLDER.glob(f"{filename}*"))
-        if not downloaded_files:
-            logger.error(f"No files found matching pattern: {filename}*")
-            return jsonify({'success': False, 'error': 'Downloaded file not found'}), 404
+        # Find the downloaded file - look for our exact filename
+        if not filepath.exists():
+            # Fallback: find any file with our base name
+            downloaded_files = list(DOWNLOAD_FOLDER.glob(f"{filepath.stem}*"))
+            if downloaded_files:
+                filepath = downloaded_files[0]
+                filename = filepath.name
+            else:
+                raise FileNotFoundError("Downloaded file not found")
             
-        # Get the first matching file (should be only one)
-        downloaded_file = downloaded_files[0]
-        logger.info(f"Successfully downloaded: {downloaded_file.name}")
+        logger.info(f"Successfully downloaded: {filename}")
             
         return jsonify({
             'success': True,
             'message': 'Download complete',
-            'filename': downloaded_file.name,
-            'download_url': f'/api/downloads/{downloaded_file.name}',
+            'filename': filename,
+            'download_url': f'/api/downloads/{filename}',
         })
     except Exception as e:
         logger.error(f"Download failed: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/downloads/<filename>', methods=['GET'])
+@app.route('/api/downloads/<path:filename>', methods=['GET'])
 def download_file(filename):
     try:
-        # Sanitize filename for security
-        if not re.match(r'^[a-zA-Z0-9_\-\.]+$', filename):
+        # Security check - only allow alphanumeric, underscores, hyphens, and dots
+        if not re.match(r'^[\w\-\.]+$', filename):
+            logger.error(f"Invalid filename pattern: {filename}")
             return jsonify({'success': False, 'error': 'Invalid filename'}), 400
             
         file_path = DOWNLOAD_FOLDER / filename
+        
+        # Additional check for path traversal attempts
+        try:
+            file_path.resolve().relative_to(DOWNLOAD_FOLDER.resolve())
+        except ValueError:
+            logger.error(f"Path traversal attempt: {filename}")
+            return jsonify({'success': False, 'error': 'Invalid filename'}), 400
         
         if not file_path.exists():
             logger.error(f"File not found: {filename}")
