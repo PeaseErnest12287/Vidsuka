@@ -16,16 +16,26 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 
-# Configure CORS - Moved after app initialization
+# Configure CORS
 CORS(app, resources={
     r"/api/*": {
         "origins": [
-            "https://pracky.vercel.app/",
+            "https://pracky.vercel.app",
             "http://localhost:3000"
         ],
-        "supports_credentials": True  # Allows credentials
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "supports_credentials": True
     }
 })
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'https://pracky.vercel.app')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 
 # Configuration
@@ -157,10 +167,10 @@ def download_file(filename):
 @app.route('/api/whatsapp', methods=['GET'])
 def whatsapp_links():
     return jsonify({
+        'success': True,
         'channel': os.getenv('WHATSAPP_CHANNEL', 'https://whatsapp.com/channel/0029VayK4ty7DAWr0jeCZx0i'),
         'group': os.getenv('WHATSAPP_GROUP', 'https://chat.whatsapp.com/FAJjIZY3a09Ck73ydqMs4E')
-    })
-
+    }), 200
 # Serve React frontend
 @app.route('/')
 def serve_frontend():
