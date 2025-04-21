@@ -21,10 +21,12 @@ CORS(app, resources={
     r"/api/*": {
         "origins": [
             "https://pracky.vercel.app/",
-            "http://localhost:3000"  # For local development
-        ]
+            "http://localhost:3000"
+        ],
+        "supports_credentials": True  # Allows credentials
     }
 })
+
 
 # Configuration
 DOWNLOAD_FOLDER = Path("downloads")
