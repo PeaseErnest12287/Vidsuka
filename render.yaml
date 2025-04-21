@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: vidsuka-backend
+    name: pracky-backend
     env: python
-    buildCommand: |
-      apt-get update && apt-get install -y ffmpeg
-      pip install -r requirements.txt
-    startCommand: python app.py
-    # Expose port 5000 for Flask to listen on
-    port: 5000
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --timeout 120 --workers 4
+    healthCheckPath: /api/whatsapp
+    envVars:
+      - key: DOWNLOAD_FOLDER
+        value: /var/data/downloads

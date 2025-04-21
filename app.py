@@ -37,15 +37,17 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
-
 # Configuration
-DOWNLOAD_FOLDER = Path("downloads")
+DOWNLOAD_FOLDER = Path(os.getenv('DOWNLOAD_FOLDER', 'downloads'))
 DOWNLOAD_FOLDER.mkdir(exist_ok=True)
 MAX_FILENAME_LENGTH = 100
 CLEANUP_OLDER_THAN = timedelta(hours=24)  # 24 hours
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger("PrackyDownloader")
 
 # Initialize scheduler
@@ -66,6 +68,12 @@ def get_video_info(url):
         'no_warnings': True,
         'simulate': True,
         'extract_flat': False,
+        'ignoreerrors': True,
+        'extractor_args': {
+            'youtube': {
+                'skip': ['dash', 'hls']  # Helps with Shorts
+            }
+        }
     }
     
     try:
@@ -95,18 +103,26 @@ def cleanup_old_files():
             except Exception as e:
                 logger.error(f"Error deleting {file.name}: {str(e)}")
 
+@app.before_first_request
+def startup():
+    """Initial checks when server starts"""
+    logger.info(f"Download folder: {DOWNLOAD_FOLDER.absolute()}")
+    logger.info(f"Download folder exists: {DOWNLOAD_FOLDER.exists()}")
+    logger.info(f"Download folder writable: {os.access(DOWNLOAD_FOLDER, os.W_OK)}")
+    logger.info(f"Files in download folder: {list(DOWNLOAD_FOLDER.iterdir())}")
+
 # Routes
 @app.route('/api/info', methods=['GET'])
 def video_info():
     url = request.args.get('url')
     if not url:
-        return jsonify({'error': 'URL is required'}), 400
+        return jsonify({'success': False, 'error': 'URL is required'}), 400
     
     try:
         info = get_video_info(url)
-        return jsonify(info)
+        return jsonify({'success': True, 'data': info})
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'success': False, 'error': str(e)}), 400
 
 @app.route('/api/download', methods=['POST'])
 def download_video():
@@ -115,7 +131,7 @@ def download_video():
     format_id = data.get('format_id', 'best')
     
     if not url:
-        return jsonify({'error': 'URL is required'}), 400
+        return jsonify({'success': False, 'error': 'URL is required'}), 400
     
     try:
         # Get video info first
@@ -133,36 +149,64 @@ def download_video():
                 'key': 'FFmpegVideoConvertor',
                 'preferedformat': 'mp4',
             }],
+            'ignoreerrors': True,
+            'extractor_args': {
+                'youtube': {
+                    'skip': ['dash', 'hls']
+                }
+            }
         }
         
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
         
-        # Find the downloaded file
-        downloaded_files = list(DOWNLOAD_FOLDER.glob(f"{filename}.*"))
+        # Find the downloaded file - more robust search
+        downloaded_files = list(DOWNLOAD_FOLDER.glob(f"{filename}*"))
         if not downloaded_files:
-            raise Exception("Downloaded file not found")
+            logger.error(f"No files found matching pattern: {filename}*")
+            return jsonify({'success': False, 'error': 'Downloaded file not found'}), 404
+            
+        # Get the first matching file (should be only one)
+        downloaded_file = downloaded_files[0]
+        logger.info(f"Successfully downloaded: {downloaded_file.name}")
             
         return jsonify({
+            'success': True,
             'message': 'Download complete',
-            'filename': downloaded_files[0].name,
-            'download_url': f'/api/downloads/{downloaded_files[0].name}',
+            'filename': downloaded_file.name,
+            'download_url': f'/api/downloads/{downloaded_file.name}',
         })
     except Exception as e:
         logger.error(f"Download failed: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/downloads/<filename>', methods=['GET'])
 def download_file(filename):
-    file_path = DOWNLOAD_FOLDER / filename
-    if not file_path.exists():
-        return jsonify({'error': 'File not found'}), 404
-    
-    return send_file(
-        file_path,
-        as_attachment=True,
-        download_name=filename
-    )
+    try:
+        # Sanitize filename for security
+        if not re.match(r'^[a-zA-Z0-9_\-\.]+$', filename):
+            return jsonify({'success': False, 'error': 'Invalid filename'}), 400
+            
+        file_path = DOWNLOAD_FOLDER / filename
+        
+        if not file_path.exists():
+            logger.error(f"File not found: {filename}")
+            return jsonify({'success': False, 'error': 'File not found'}), 404
+            
+        # Verify file is not empty
+        if file_path.stat().st_size == 0:
+            logger.error(f"Empty file: {filename}")
+            return jsonify({'success': False, 'error': 'File is empty'}), 500
+            
+        return send_file(
+            file_path,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='video/mp4'
+        )
+    except Exception as e:
+        logger.error(f"Download failed: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/whatsapp', methods=['GET'])
 def whatsapp_links():
@@ -170,7 +214,8 @@ def whatsapp_links():
         'success': True,
         'channel': os.getenv('WHATSAPP_CHANNEL', 'https://whatsapp.com/channel/0029VayK4ty7DAWr0jeCZx0i'),
         'group': os.getenv('WHATSAPP_GROUP', 'https://chat.whatsapp.com/FAJjIZY3a09Ck73ydqMs4E')
-    }), 200
+    })
+
 # Serve React frontend
 @app.route('/')
 def serve_frontend():
@@ -188,6 +233,5 @@ def cleanup_job():
 if __name__ == '__main__':
     # Use this for production
     from waitress import serve
+    logger.info("Starting server...")
     serve(app, host="0.0.0.0", port=5000)
-    # Or for development:
-    # app.run(host='0.0.0.0', port=5000, debug=True)

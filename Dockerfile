@@ -4,7 +4,6 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
 # Install system dependencies (ffmpeg for video processing)
@@ -23,8 +22,8 @@ RUN pip install -r requirements.txt
 # Copy all project files
 COPY . .
 
-# Expose port (Flask runs on 5000)
+# Expose port (Gunicorn will serve on 5000)
 EXPOSE 5000
 
-# Run the app
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Run the app with Gunicorn
+CMD ["gunicorn", "app:app", "--timeout", "120", "--workers", "4", "--bind", "0.0.0.0:5000"]
