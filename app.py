@@ -1,122 +1,181 @@
-import logging
+import os
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
-import yt_dlp
-import os
+from flask_apscheduler import APScheduler
+import yt_dlp as youtube_dl
+import uuid
 import re
+from datetime import datetime, timedelta
+from pathlib import Path
+import logging
+from dotenv import load_dotenv
 
-# --------------------- Setup ---------------------
-app = Flask(__name__)
-CORS(app)
+# Load environment variables
+load_dotenv()
 
-log_file_path = 'app.log'
-logging.basicConfig(
-    filename=log_file_path,
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+# Initialize Flask app
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 
-VIDEO_DIR = './saved/videos'
-os.makedirs(VIDEO_DIR, exist_ok=True)
-
-download_progress = {}
-
-# --------------------- Helper Functions ---------------------
-
-def clean_filename(title):
-    cleaned_title = re.sub(r'[^a-zA-Z0-9\s]', '', title)
-    cleaned_title = cleaned_title.replace(' ', '_').replace('🔥', '').replace('🤯', '').replace('❗️', '')
-    return cleaned_title[:100] if len(cleaned_title) > 100 else cleaned_title
-
-def progress_hook(d):
-    global download_progress
-    if d['status'] == 'downloading':
-        try:
-            percent = (d['downloaded_bytes'] / d['total_bytes']) * 100 if d.get('total_bytes') else 0
-        except ZeroDivisionError:
-            percent = 0
-        download_progress = {
-            'status': 'downloading',
-            'downloaded': d.get('downloaded_bytes', 0),
-            'total': d.get('total_bytes', 0),
-            'percent': percent
-        }
-
-def download_video_yt_dlp(url, format_choice=None):
-    global download_progress
-    logging.info(f"Request received for URL: {url}")
-
-    # Temporary output filename pattern
-    temp_outtmpl = f'{VIDEO_DIR}/%(title)s.%(ext)s'
-
-    ydl_opts = {
-        'format': format_choice if format_choice else 'bestvideo+bestaudio/best',
-        'outtmpl': temp_outtmpl,
-        'postprocessors': [{
-            'key': 'FFmpegVideoConvertor',
-            'preferedformat': 'mp4',
-        }],
-        'noplaylist': True,
-        'progress_hooks': [progress_hook],
+# Configure CORS - Moved after app initialization
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "https://pracky.vercel.app/",
+            "http://localhost:3000"  # For local development
+        ]
     }
+})
 
+# Configuration
+DOWNLOAD_FOLDER = Path("downloads")
+DOWNLOAD_FOLDER.mkdir(exist_ok=True)
+MAX_FILENAME_LENGTH = 100
+CLEANUP_OLDER_THAN = timedelta(hours=24)  # 24 hours
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("PrackyDownloader")
+
+# Initialize scheduler
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
+
+# Helper functions
+def sanitize_filename(filename):
+    """Sanitize filename to remove invalid characters"""
+    filename = re.sub(r'[\\/*?:"<>|]', "_", filename)
+    return filename[:MAX_FILENAME_LENGTH]
+
+def get_video_info(url):
+    """Get video info without downloading"""
+    ydl_opts = {
+        'quiet': True,
+        'no_warnings': True,
+        'simulate': True,
+        'extract_flat': False,
+    }
+    
     try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=True)
-            title = info.get('title', 'Untitled')
-            ext = 'mp4'
-            cleaned = clean_filename(title)
-            real_filename = os.path.join(VIDEO_DIR, f"{cleaned}.{ext}")
-
-            # Sometimes yt-dlp returns final filename
-            downloaded_file = ydl.prepare_filename(info)
-            if not downloaded_file.endswith('.mp4'):
-                downloaded_file = downloaded_file.rsplit('.', 1)[0] + '.mp4'
-
-            # Rename if needed
-            if os.path.exists(downloaded_file) and downloaded_file != real_filename:
-                os.rename(downloaded_file, real_filename)
-                logging.info(f"Renamed file to {real_filename}")
-
-            logging.info(f"Final file path: {real_filename}")
-            return real_filename
-
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            return {
+                'title': info.get('title', 'Untitled'),
+                'thumbnail': info.get('thumbnail'),
+                'duration': info.get('duration'),
+                'formats': info.get('formats', []),
+                'extractor': info.get('extractor'),
+                'webpage_url': info.get('webpage_url'),
+            }
     except Exception as e:
-        logging.error(f"Download error: {str(e)}")
-        raise Exception(f"Download failed: {str(e)}")
+        logger.error(f"Error getting video info: {str(e)}")
+        raise
 
-# --------------------- Routes ---------------------
+def cleanup_old_files():
+    """Clean up files older than CLEANUP_OLDER_THAN"""
+    now = datetime.now()
+    for file in DOWNLOAD_FOLDER.iterdir():
+        file_time = datetime.fromtimestamp(file.stat().st_mtime)
+        if (now - file_time) > CLEANUP_OLDER_THAN:
+            try:
+                file.unlink()
+                logger.info(f"Deleted old file: {file.name}")
+            except Exception as e:
+                logger.error(f"Error deleting {file.name}: {str(e)}")
 
-@app.route('/download', methods=['POST'])
+# Routes
+@app.route('/api/info', methods=['GET'])
+def video_info():
+    url = request.args.get('url')
+    if not url:
+        return jsonify({'error': 'URL is required'}), 400
+    
+    try:
+        info = get_video_info(url)
+        return jsonify(info)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/download', methods=['POST'])
 def download_video():
     data = request.json
     url = data.get('url')
-    format_choice = data.get('format')
-
+    format_id = data.get('format_id', 'best')
+    
     if not url:
-        logging.warning("No URL provided")
-        return jsonify({"error": "No URL provided"}), 400
-
+        return jsonify({'error': 'URL is required'}), 400
+    
     try:
-        logging.info(f"Starting download for: {url}")
-        filename = download_video_yt_dlp(url, format_choice)
-
-        if not os.path.exists(filename):
-            logging.error(f"File not found: {filename}")
-            return jsonify({"error": "Download complete, but file not found"}), 500
-
-        logging.info(f"Sending file: {filename}")
-        return send_file(filename, as_attachment=True)
-
+        # Get video info first
+        info = get_video_info(url)
+        safe_title = sanitize_filename(info['title'])
+        filename = f"{safe_title}_{str(uuid.uuid4())[:8]}"
+        filepath = DOWNLOAD_FOLDER / filename
+        
+        ydl_opts = {
+            'format': format_id,
+            'outtmpl': str(filepath) + '.%(ext)s',
+            'quiet': False,
+            'merge_output_format': 'mp4',
+            'postprocessors': [{
+                'key': 'FFmpegVideoConvertor',
+                'preferedformat': 'mp4',
+            }],
+        }
+        
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+        
+        # Find the downloaded file
+        downloaded_files = list(DOWNLOAD_FOLDER.glob(f"{filename}.*"))
+        if not downloaded_files:
+            raise Exception("Downloaded file not found")
+            
+        return jsonify({
+            'message': 'Download complete',
+            'filename': downloaded_files[0].name,
+            'download_url': f'/api/downloads/{downloaded_files[0].name}',
+        })
     except Exception as e:
-        logging.error(f"Exception during /download: {str(e)}")
-        return jsonify({"error": f"Server error: {str(e)}"}), 500
+        logger.error(f"Download failed: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
-@app.route('/download-progress', methods=['GET'])
-def get_download_progress():
-    return jsonify(download_progress)
+@app.route('/api/downloads/<filename>', methods=['GET'])
+def download_file(filename):
+    file_path = DOWNLOAD_FOLDER / filename
+    if not file_path.exists():
+        return jsonify({'error': 'File not found'}), 404
+    
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name=filename
+    )
 
-# --------------------- Run ---------------------
+@app.route('/api/whatsapp', methods=['GET'])
+def whatsapp_links():
+    return jsonify({
+        'channel': os.getenv('WHATSAPP_CHANNEL', 'https://whatsapp.com/channel/0029VayK4ty7DAWr0jeCZx0i'),
+        'group': os.getenv('WHATSAPP_GROUP', 'https://chat.whatsapp.com/FAJjIZY3a09Ck73ydqMs4E')
+    })
+
+# Serve React frontend
+@app.route('/')
+def serve_frontend():
+    return app.send_static_file('index.html')
+
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
+
+# Scheduled tasks
+@scheduler.task('interval', id='cleanup_job', hours=1)
+def cleanup_job():
+    cleanup_old_files()
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Use this for production
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5000)
+    # Or for development:
+    # app.run(host='0.0.0.0', port=5000, debug=True)

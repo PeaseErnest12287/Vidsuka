@@ -1,8 +1,0 @@
-POST http://127.0.0.1:5000/download
-Content-Type: application/json
-
-{
-    "url": "https://www.facebook.com/reel/3923630831281800/?s=ifu&__cft__[0]=AZWEmINhooBdBkTTF7QjG2PoyU-K6CQSZGXEOu5h_DvHwJ0dw-52WuFW4cbCAizHy1hxb-fW26kDI1qyQm5_m_5lYf9vNXFUrvEJt0xLUfQr1l_lIHGK-jmMt81xE8ZB9xSOcIToO9gOp8_RK6a1KaJDeE1vbByeQkg95AsFu3nsgMYY-h9lS68MSBXZKfMaJrH-yvAOSoXhv8n4etB8z7IcyMVZiocuzSKQe2FrqUSPIA",
-  "platform": "yt_dlp"
-  
-}
