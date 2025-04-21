@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import logging
 from dotenv import load_dotenv
-from urllib.parse import unquote
+from urllib.parse import unquote, quote
 
 # Load environment variables
 load_dotenv()
@@ -58,9 +58,14 @@ scheduler.start()
 
 # Helper functions
 def sanitize_filename(filename):
-    """Sanitize filename to remove invalid characters"""
+    """Sanitize filename to remove invalid characters but keep spaces"""
+    # Replace only truly problematic characters
     filename = re.sub(r'[\\/*?:"<>|]', "_", filename)
-    return filename[:MAX_FILENAME_LENGTH]
+    # Shorten if needed but preserve extension
+    if len(filename) > MAX_FILENAME_LENGTH:
+        name, ext = os.path.splitext(filename)
+        filename = name[:MAX_FILENAME_LENGTH-len(ext)] + ext
+    return filename
 
 def get_video_info(url):
     """Get video info without downloading"""
@@ -138,7 +143,7 @@ def download_video():
         # Get video info first
         info = get_video_info(url)
         safe_title = sanitize_filename(info['title'])
-        filename = f"{safe_title}_{str(uuid.uuid4())[:8]}.mp4"  # Force .mp4 extension
+        filename = f"{safe_title}_{str(uuid.uuid4())[:8]}.mp4"
         filepath = DOWNLOAD_FOLDER / filename
         
         ydl_opts = {
@@ -161,7 +166,7 @@ def download_video():
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
         
-        # Find the downloaded file - look for our exact filename
+        # Verify the file exists with our exact filename
         if not filepath.exists():
             # Fallback: find any file with our base name
             downloaded_files = list(DOWNLOAD_FOLDER.glob(f"{filepath.stem}*"))
@@ -170,14 +175,14 @@ def download_video():
                 filename = filepath.name
             else:
                 raise FileNotFoundError("Downloaded file not found")
-            
+        
         logger.info(f"Successfully downloaded: {filename}")
             
         return jsonify({
             'success': True,
             'message': 'Download complete',
             'filename': filename,
-            'download_url': f'/api/downloads/{filename}',
+            'download_url': f'/api/downloads/{quote(filename)}',  # URL encode the filename
         })
     except Exception as e:
         logger.error(f"Download failed: {str(e)}")
@@ -186,33 +191,36 @@ def download_video():
 @app.route('/api/downloads/<path:filename>', methods=['GET'])
 def download_file(filename):
     try:
-        # Security check - only allow alphanumeric, underscores, hyphens, and dots
-        if not re.match(r'^[\w\-\.]+$', filename):
-            logger.error(f"Invalid filename pattern: {filename}")
+        # Decode the URL-encoded filename
+        decoded_filename = unquote(filename)
+        
+        # Security check - allow spaces and common characters
+        if not re.match(r'^[\w\s\-\.#]+$', decoded_filename):
+            logger.error(f"Invalid filename pattern: {decoded_filename}")
             return jsonify({'success': False, 'error': 'Invalid filename'}), 400
             
-        file_path = DOWNLOAD_FOLDER / filename
+        file_path = DOWNLOAD_FOLDER / decoded_filename
         
-        # Additional check for path traversal attempts
+        # Additional security check for path traversal
         try:
             file_path.resolve().relative_to(DOWNLOAD_FOLDER.resolve())
         except ValueError:
-            logger.error(f"Path traversal attempt: {filename}")
+            logger.error(f"Path traversal attempt: {decoded_filename}")
             return jsonify({'success': False, 'error': 'Invalid filename'}), 400
         
         if not file_path.exists():
-            logger.error(f"File not found: {filename}")
+            logger.error(f"File not found: {decoded_filename}")
             return jsonify({'success': False, 'error': 'File not found'}), 404
             
         # Verify file is not empty
         if file_path.stat().st_size == 0:
-            logger.error(f"Empty file: {filename}")
+            logger.error(f"Empty file: {decoded_filename}")
             return jsonify({'success': False, 'error': 'File is empty'}), 500
             
         return send_file(
             file_path,
             as_attachment=True,
-            download_name=filename,
+            download_name=decoded_filename,
             mimetype='video/mp4'
         )
     except Exception as e:
