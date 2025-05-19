@@ -1,0 +1,5 @@
+2025-05-19 17:18:20,182 - apscheduler.scheduler - INFO - Scheduler started
+2025-05-19 17:37:42,119 - apscheduler.scheduler - INFO - Scheduler started
+2025-05-19 17:39:20,362 - apscheduler.scheduler - INFO - Scheduler started
+2025-05-19 17:39:20,366 - apscheduler.scheduler - INFO - Added job "cleanup_job" to job store "default"
+2025-05-19 17:39:20,547 - waitress - INFO - Serving on http://0.0.0.0:5000
